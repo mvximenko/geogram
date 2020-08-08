@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "nodemon src/server.ts",
+    "dev": "nodemon server.ts",
     "build": "tsc -p ."
   },
   "repository": {
@@ -29,9 +29,12 @@
     "mongoose": "^5.9.27"
   },
   "devDependencies": {
+    "@types/config": "0.0.36",
     "@types/express": "^4.17.7",
+    "@types/mongoose": "^5.7.36",
     "@types/node": "^14.0.27",
     "concurrently": "^5.2.0",
+    "dotenv": "^8.2.0",
     "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
