@@ -9,6 +9,7 @@ const app: Application = express();
 
 connectDB();
 
+app.use(express.json());
 app.get('/', (req: Request, res: Response) => {
   res.send('API Running');
 });
