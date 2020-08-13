@@ -32,7 +32,6 @@ router.post(
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
-
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
@@ -41,7 +40,6 @@ router.post(
 
     try {
       let user = await User.findOne({ email });
-
       if (!user) {
         return res
           .status(400)
@@ -49,7 +47,6 @@ router.post(
       }
 
       const isMatch = await compare(password, user.password);
-
       if (!isMatch) {
         return res
           .status(400)
