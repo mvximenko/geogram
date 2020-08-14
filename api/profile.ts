@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import normalize from 'normalize-url';
 import auth from '../middleware/auth';
+import checkObjectId from '../middleware/checkObjectId';
 import Profile from '../models/Profile';
 
 const router = Router();
@@ -55,5 +56,42 @@ router.post('/', auth, async (req: Request, res: Response) => {
     res.status(500).send('Server Error');
   }
 });
+
+// @route   GET api/profile
+// @desc    Get all profiles
+// @access  Public
+router.get('/', async (req: Request, res: Response) => {
+  try {
+    const profiles = await Profile.find().populate('user', ['name']);
+    res.json(profiles);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route   GET api/profile/user/:user_id
+// @desc    Get profile by user ID
+// @access  Public
+router.get(
+  '/user/:user_id',
+  checkObjectId('user_id'),
+  async ({ params: { user_id } }, res) => {
+    try {
+      const profile = await Profile.findOne({
+        user: user_id,
+      }).populate('user', ['name']);
+
+      if (!profile) {
+        return res.status(400).json({ msg: 'Profile not found' });
+      }
+
+      return res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      return res.status(500).json({ msg: 'Server error' });
+    }
+  }
+);
 
 export default router;
