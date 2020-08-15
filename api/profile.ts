@@ -4,6 +4,7 @@ import normalize from 'normalize-url';
 import auth from '../middleware/auth';
 import checkObjectId from '../middleware/checkObjectId';
 import Profile from '../models/Profile';
+import User from '../models/User';
 
 const router = Router();
 
@@ -93,5 +94,22 @@ router.get(
     }
   }
 );
+
+// @route   DELETE api/profile
+// @desc    Delete profile, user & posts
+// @access  Private
+router.delete('/', auth, async (req: Request, res: Response) => {
+  try {
+    // Remove profile
+    await Profile.findOneAndRemove({ user: req.user.id });
+    // Remove user
+    await User.findOneAndRemove({ _id: req.user.id });
+
+    res.json({ msg: 'User deleted' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 export default router;
